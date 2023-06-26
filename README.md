@@ -1,6 +1,6 @@
 <center>
 
-## Slicing CoffeShop-UI with Flutter❤️✈️
+## Slicing CoffeShop-UI with Flutter❤️
 
 <h2><i class="fab fa-instagram"></i> Screenshots <i class="fas fa-camera"></i></h2>
 
@@ -13,7 +13,7 @@
   
 </table>
 
-[<i class="fab fa-instagram"></i> Instagram]( https://www.instagram.com/p/Ctwf9mNBdWn/)
+[<i class="fab fa-instagram"></i> Instagram](https://www.instagram.com/p/Ctwf9mNBdWn/)
 
 </center>
 
