@@ -13,7 +13,7 @@
   
 </table>
 
-[<i class="fab fa-instagram"></i> Instagram](https://www.instagram.com/p/Ctwf9mNBdWn/)
+[<i class="fab fa-instagram"></i> Instagram]( https://www.instagram.com/p/Ctwf9mNBdWn/)
 
 </center>
 
