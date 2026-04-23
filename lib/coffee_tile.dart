@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CoffeTile extends StatelessWidget {
-  final String imagepath;
- final  String type;
- final  String price;
-  const CoffeTile({
-    super.key, required this.imagepath, required this.type, required this.price,
+class CoffeeTile extends StatelessWidget {
+  final String imagePath;
+  final String type;
+  final String price;
+
+  const CoffeeTile({
+    super.key,
+    required this.imagePath,
+    required this.type,
+    required this.price,
   });
 
   @override
@@ -28,7 +32,7 @@ class CoffeTile extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.asset(
-                      imagepath,
+                      imagePath,
                       //height: 130,
                      // fit: BoxFit.cover,
                     ),
