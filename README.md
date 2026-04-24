@@ -5,6 +5,7 @@ A production-ready, feature-rich Coffee Shop application built with **Flutter**.
 ---
 
 ## 📌 1. Project Title & Description
+
 **CoffeeShop UI - Premium Experience** is a Flutter-based mobile application designed to provide a luxurious and intuitive coffee shopping experience. This project goes beyond simple *UI Slicing*, featuring a fully integrated dynamic business logic system.
 
 **Project Goal:**
@@ -13,6 +14,7 @@ To set a new standard for coffee e-commerce applications by focusing on premium 
 ---
 
 ## 📌 2. Overview / Background
+
 Many current coffee applications suffer from rigid and static interfaces. This project was created to address the challenge of building an app that feels "alive" through the use of micro-animations and intelligent transitions.
 
 **The Solution:**
@@ -50,6 +52,7 @@ Many current coffee applications suffer from rigid and static interfaces. This p
 ---
 
 ## 📌 4. Tech Stack
+
 - **Frontend:** [Flutter](https://flutter.dev/) (Main Framework)
 - **State Management:** [Provider](https://pub.dev/packages/provider)
 - **Animations:** [Lottie](https://pub.dev/packages/lottie) & Flutter Hero
@@ -59,6 +62,7 @@ Many current coffee applications suffer from rigid and static interfaces. This p
 ---
 
 ## 📌 5. System Architecture
+
 This application follows the **Provider Pattern**, separating the Business Logic (*Logic Layer*) from the User Interface (*UI Layer*).
 - **Models:** Data structures for Products, CartItems, and CoffeeOrders.
 - **Providers:** Centralized state control and application logic (Single Source of Truth).
@@ -68,20 +72,22 @@ This application follows the **Provider Pattern**, separating the Business Logic
 
 ## 📌 6. Installation Guide
 
-### Requirements:
+### Requirements
 - Flutter SDK (Latest version recommended)
 - Dart SDK
 - Android Studio / VS Code
 
-### Step-by-step:
+### Step-by-step
 1. **Clone Repo:**
    ```bash
    git clone https://github.com/SLicing-CoffeShop-UI/CoffeShop-UI.git
    ```
+
 2. **Install Dependencies:**
    ```bash
    flutter pub get
    ```
+
 3. **Run Project:**
    ```bash
    flutter run
@@ -101,6 +107,7 @@ This application follows the **Provider Pattern**, separating the Business Logic
 ---
 
 ## 📌 8. Folder Structure
+
 ```text
 lib/
 ├── models/         # Data Structures (Coffee, CartItem, CoffeeOrder)
@@ -113,12 +120,14 @@ lib/
 ---
 
 ## 📌 9. Screenshots / Demo
+
 *(Add your images or demo GIFs here)*
 - [Initial UI Preview](https://i.postimg.cc/nzC799GQ/Screenshot-2023-06-26-at-07-10-10.png)
 
 ---
 
 ## 📌 10. Roadmap / Future Development
+
 - [ ] Firebase Auth integration for real-world authentication.
 - [ ] Online Database implementation (Firestore/Supabase).
 - [ ] Payment Gateway integration (Midtrans/Stripe).
@@ -127,19 +136,22 @@ lib/
 ---
 
 ## 📌 11. Contributing
+
 Contributions are welcome! Please **Fork** this repo, create a new branch, and submit a **Pull Request**. Ensure your code follows Flutter clean code standards.
 
 ---
 
 ## 📌 12. License
+
 Distributed under the **MIT License**. See `LICENSE` for more information.
 
 ---
 
 ## 📌 13. Author / Credits
-**Rizky28eka**
+
+**SLicing-CoffeShop-UI**
 - Instagram: [@rzkyhryd._](https://www.instagram.com/rzkyhryd._/)
-- GitHub: [rizky28eka](https://github.com/rizky28eka)
+- GitHub: [SLicing-CoffeShop-UI](https://github.com/SLicing-CoffeShop-UI)
 
 ---
 
