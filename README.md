@@ -76,7 +76,7 @@ This application follows the **Provider Pattern**, separating the Business Logic
 ### Step-by-step:
 1. **Clone Repo:**
    ```bash
-   git clone https://github.com/rizky28eka/CoffeShop-UI.git
+   git clone https://github.com/SLicing-CoffeShop-UI/CoffeShop-UI.git
    ```
 2. **Install Dependencies:**
    ```bash
