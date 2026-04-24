@@ -18,15 +18,30 @@ class CoffeeDetailsPage extends StatefulWidget {
 
 class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
   String selectedSize = "M";
+  String selectedMilk = "Oat Milk";
+  bool extraShot = false;
 
   void addToCart() {
-    context.read<CoffeeShopProvider>().addToCart(widget.coffee, size: selectedSize);
+    context.read<CoffeeShopProvider>().addToCart(
+          widget.coffee,
+          size: selectedSize,
+          milkType: selectedMilk,
+          extraShot: extraShot,
+        );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Added to cart!"),
         duration: Duration(seconds: 1),
       ),
     );
+  }
+
+  double get currentPrice {
+    double price = double.parse(widget.coffee.price);
+    if (selectedSize == 'L') price += 1.0;
+    if (selectedSize == 'S') price -= 0.5;
+    if (extraShot) price += 0.5;
+    return price;
   }
 
   @override
@@ -36,7 +51,7 @@ class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 400,
+            expandedHeight: 350,
             pinned: true,
             backgroundColor: AppColors.background,
             flexibleSpace: FlexibleSpaceBar(
@@ -53,9 +68,14 @@ class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
               onPressed: () => Navigator.pop(context),
             ),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.favorite_border, color: AppColors.white),
-                onPressed: () {},
+              Consumer<CoffeeShopProvider>(
+                builder: (context, value, child) => IconButton(
+                  icon: Icon(
+                    widget.coffee.isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: widget.coffee.isFavorite ? Colors.red : AppColors.white,
+                  ),
+                  onPressed: () => value.toggleFavorite(widget.coffee),
+                ),
               ),
             ],
           ),
@@ -88,11 +108,10 @@ class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
                   const SizedBox(height: 25),
                   Text("Description", style: AppStyles.subHeading.copyWith(fontSize: 18)),
                   const SizedBox(height: 10),
-                  Text(
-                    widget.coffee.description,
-                    style: AppStyles.body,
-                  ),
+                  Text(widget.coffee.description, style: AppStyles.body),
                   const SizedBox(height: 25),
+                  
+                  // Size Selection
                   Text("Size", style: AppStyles.subHeading.copyWith(fontSize: 18)),
                   const SizedBox(height: 15),
                   Row(
@@ -106,22 +125,61 @@ class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
                           decoration: BoxDecoration(
                             color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.transparent,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: isSelected ? AppColors.primary : AppColors.cardBackground,
-                            ),
+                            border: Border.all(color: isSelected ? AppColors.primary : AppColors.cardBackground),
                           ),
                           child: Text(
                             size,
-                            style: TextStyle(
-                              color: isSelected ? AppColors.primary : AppColors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: TextStyle(color: isSelected ? AppColors.primary : AppColors.white, fontWeight: FontWeight.bold),
                           ),
                         ),
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 100), // Spacer for bottom bar
+                  
+                  const SizedBox(height: 25),
+                  // Milk Customization
+                  Text("Milk Type", style: AppStyles.subHeading.copyWith(fontSize: 18)),
+                  const SizedBox(height: 15),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: ["Oat Milk", "Almond Milk", "Dairy", "Soy Milk"].map((milk) {
+                        bool isSelected = milk == selectedMilk;
+                        return GestureDetector(
+                          onTap: () => setState(() => selectedMilk = milk),
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppColors.primary : AppColors.cardBackground,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              milk,
+                              style: TextStyle(color: isSelected ? Colors.white : AppColors.secondaryText),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 25),
+                  // Extra Shot Toggle
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Extra Shot (+€0.50)", style: AppStyles.subHeading.copyWith(fontSize: 18)),
+                      Switch(
+                        value: extraShot,
+                        activeThumbColor: AppColors.primary,
+                        activeTrackColor: AppColors.primary.withValues(alpha: 0.5),
+                        onChanged: (val) => setState(() => extraShot = val),
+                      ),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 120), // Spacer for bottom bar
                 ],
               ),
             ),
@@ -133,10 +191,7 @@ class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: const BoxDecoration(
           color: AppColors.cardBackground,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,7 +201,7 @@ class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Price", style: AppStyles.body),
-                Text("€ ${widget.coffee.price}", style: AppStyles.price.copyWith(fontSize: 24, color: AppColors.white)),
+                Text("€ ${currentPrice.toStringAsFixed(2)}", style: AppStyles.price.copyWith(fontSize: 24, color: AppColors.white)),
               ],
             ),
             ElevatedButton(
@@ -154,14 +209,9 @@ class _CoffeeDetailsPageState extends State<CoffeeDetailsPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
               ),
-              child: Text(
-                "Buy Now",
-                style: AppStyles.subHeading.copyWith(fontSize: 18),
-              ),
+              child: Text("Add to Cart", style: AppStyles.subHeading.copyWith(fontSize: 18)),
             ),
           ],
         ),

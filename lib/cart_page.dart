@@ -52,7 +52,10 @@ class CartPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(item.coffee.name, style: AppStyles.subHeading.copyWith(fontSize: 16)),
-                              Text("${item.coffee.type} (${item.selectedSize})", style: AppStyles.body),
+                              Text(
+                                "${item.selectedSize} • ${item.milkType}${item.extraShot ? " • Extra Shot" : ""}",
+                                style: AppStyles.body.copyWith(fontSize: 12),
+                              ),
                               const SizedBox(height: 5),
                               Text("€ ${item.coffee.price}", style: AppStyles.price),
                             ],

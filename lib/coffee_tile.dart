@@ -31,10 +31,13 @@ class CoffeeTile extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
-                      imagePath,
-                      //height: 130,
-                     // fit: BoxFit.cover,
+                    child: Hero(
+                      tag: imagePath,
+                      child: Image.asset(
+                        imagePath,
+                        //height: 130,
+                       // fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'package:provider/provider.dart';
+import 'providers/coffee_shop_provider.dart';
 
 class OrderTrackingPage extends StatelessWidget {
   const OrderTrackingPage({super.key});
@@ -13,44 +15,60 @@ class OrderTrackingPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppColors.cardBackground,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                children: [
-                  const CircleAvatar(radius: 25, backgroundImage: AssetImage("assets/images/1.jpg")),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Dedi (Driver)", style: AppStyles.subHeading.copyWith(fontSize: 16)),
-                        Text("On the way to your location", style: AppStyles.body),
-                      ],
-                    ),
-                  ),
-                  const Icon(Icons.call, color: AppColors.primary),
-                ],
-              ),
-            ),
-            const SizedBox(height: 40),
-            _buildTrackingStep("Order Received", "09:30 AM", true),
-            _buildTrackingLine(true),
-            _buildTrackingStep("Preparing your Coffee", "09:35 AM", true),
-            _buildTrackingLine(true),
-            _buildTrackingStep("On the way", "09:45 AM", true),
-            _buildTrackingLine(false),
-            _buildTrackingStep("Delivered", "Estimation 09:55 AM", false),
-          ],
+        leading: IconButton(
+          icon: const Icon(Icons.close, color: AppColors.white),
+          onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
         ),
+      ),
+      body: Consumer<CoffeeShopProvider>(
+        builder: (context, value, child) {
+          if (value.orders.isEmpty) {
+            return Center(child: Text("No active orders", style: AppStyles.body));
+          }
+          final latestOrder = value.orders.first;
+
+          return Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardBackground,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      const CircleAvatar(radius: 25, backgroundImage: AssetImage("assets/images/1.jpg")),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Dedi (Driver)", style: AppStyles.subHeading.copyWith(fontSize: 16)),
+                            Text("On the way to your location", style: AppStyles.body),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.call, color: AppColors.primary),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                _buildTrackingStep("Order Received", "${latestOrder.dateTime.hour}:${latestOrder.dateTime.minute}", true),
+                _buildTrackingLine(true),
+                _buildTrackingStep("Preparing your Coffee", "Just now", true),
+                _buildTrackingLine(true),
+                _buildTrackingStep("On the way", "In a moment", true),
+                _buildTrackingLine(false),
+                _buildTrackingStep("Delivered", "Estimation 15 mins", false),
+                const Spacer(),
+                Text("Order #${latestOrder.id.substring(latestOrder.id.length - 6)}", style: AppStyles.body),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

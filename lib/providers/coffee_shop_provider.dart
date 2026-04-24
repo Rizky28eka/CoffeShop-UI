@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/coffee.dart';
 import '../models/cart_item.dart';
+import '../models/coffee_order.dart';
 
 class CoffeeShopProvider extends ChangeNotifier {
   // Catalog
@@ -37,6 +38,9 @@ class CoffeeShopProvider extends ChangeNotifier {
   // User Cart
   final List<CartItem> _userCart = [];
 
+  // Order History
+  final List<CoffeeOrder> _userOrders = [];
+
   // Favorites
   List<Coffee> get favorites => _shop.where((c) => c.isFavorite).toList();
 
@@ -46,29 +50,41 @@ class CoffeeShopProvider extends ChangeNotifier {
   // Getters
   List<Coffee> get shop => _shop;
   List<CartItem> get cart => _userCart;
+  List<CoffeeOrder> get orders => _userOrders;
   double get userPoints => _userPoints;
 
   // Total Price
   double get totalPrice {
     double total = 0;
     for (var item in _userCart) {
-      total += double.parse(item.coffee.price) * item.quantity;
+      double basePrice = double.parse(item.coffee.price);
+      if (item.selectedSize == 'L') basePrice += 1.0;
+      if (item.selectedSize == 'S') basePrice -= 0.5;
+      if (item.extraShot) basePrice += 0.5;
+      total += basePrice * item.quantity;
     }
     return total;
   }
 
   // Actions
-  void addToCart(Coffee coffee, {String size = 'M'}) {
-    // Check if already in cart
-    var existingItem = _userCart.firstWhere(
-      (item) => item.coffee.id == coffee.id && item.selectedSize == size,
-      orElse: () => CartItem(coffee: coffee, quantity: 0, selectedSize: size),
-    );
+  void addToCart(Coffee coffee, {String size = 'M', String milkType = "Default", bool extraShot = false}) {
+    // Check if item already exists with SAME customizations
+    bool itemFound = false;
+    for (var item in _userCart) {
+      if (item.coffee.id == coffee.id && item.selectedSize == size && item.milkType == milkType && item.extraShot == extraShot) {
+        item.quantity++;
+        itemFound = true;
+        break;
+      }
+    }
 
-    if (existingItem.quantity > 0) {
-      existingItem.quantity++;
-    } else {
-      _userCart.add(CartItem(coffee: coffee, selectedSize: size));
+    if (!itemFound) {
+      _userCart.add(CartItem(
+        coffee: coffee,
+        selectedSize: size,
+        milkType: milkType,
+        extraShot: extraShot,
+      ));
     }
     notifyListeners();
   }
@@ -98,8 +114,17 @@ class CoffeeShopProvider extends ChangeNotifier {
   }
 
   void checkout() {
-    // Logic for checkout (e.g., adding to history, clearing cart)
-    _userPoints += (totalPrice * 10); // Reward 10 points per Euro
+    // Save to history
+    final newOrder = CoffeeOrder(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      items: List.from(_userCart),
+      totalPrice: totalPrice + 2, // including delivery
+      dateTime: DateTime.now(),
+    );
+    _userOrders.insert(0, newOrder);
+
+    // Update points
+    _userPoints += (totalPrice * 10);
     _userCart.clear();
     notifyListeners();
   }
